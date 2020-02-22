@@ -1,33 +1,29 @@
-#include <iostream>
-#include <queue>
-#include <vector>
-#include <queue>
-#include "TreeNode.h"
+#include "globals.h"
 
-using namespace std;
+// If the graph is not a tree, then you must tag the node that it has been
+// visited so you can avoid infinite loops caused by cycles
+// If the graph is not a binary tree, then you iterate every child node
 
 vector<int> BFS(TreeNode* root) {
-	vector<int> solution;
 
-	queue<TreeNode*> queue;
+	vector<int> res;
+	queue<TreeNode*> q;
+	q.push(root);
 
-	queue.push(root);
+	while(!q.empty()) {
 
-	while (!queue.empty()) {
+		TreeNode* node = q.front();
+		q.pop();
+		res.push_back(node->val);
 
-		TreeNode* r = queue.front();
-		solution.push_back(r->val);
-		queue.pop();
-
-		if (r->left != NULL) {
-			queue.push(r->left);
+		if(node->left != NULL) {
+			q.push(node->left);
 		}
-		if (r->right != NULL) {
-			queue.push(r->right);
+		if(node->right != NULL) {
+			q.push(node->right);
 		}
 	}
-
-	return solution;
+	return res;
 }
 
 int main() {

@@ -1,19 +1,15 @@
+#include "globals.h"
+
 ListNode* reverseList(ListNode* head) {
 
-	ListNode* Cur = head;
-	ListNode* Prev = NULL;
-	ListNode* Nex;
+	ListNode* prev = NULL;
+	ListNode* curr = head;
 
-	while(Cur != NULL) {
-		Nex = Cur->next;
-		Cur->next = Prev;
-		Prev = Cur;
-		Cur = Nex;
+	while(curr != NULL) {
+		ListNode* next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;
 	}
-	return Prev;
-	/*
-	  Cannot return ListNode* head here
-	  --> head only points to the last element of the newly
-	      reversed linked list
-	 */
+	return prev;
 }

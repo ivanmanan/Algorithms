@@ -1,10 +1,31 @@
-#include <iostream>
-#include <vector>
-#include <unordered_set>
+#include "globals.h"
 
-using namespace std;
+vector<vector<int>> threeSum(vector<int>& nums) {
 
-vector<int> threeSum(vector<int>& numbers, int target) {
+	vector<vector<int>> triplets;
+
+	for(int i = 0; i < nums.size()-1; i++) {
+
+		// Do Two Sum here
+		unordered_set<int> seen;
+		for(int j = i+1; j < nums.size(); j++) {
+			int complement = -(nums[i] + nums[j]);
+			auto got = seen.find(complement);
+
+			// Exists in hash table
+			if(got != seen.end()) {
+				vector<int> triplet = {nums[i], nums[j], complement};
+				triplets.push_back(triplet);
+			}
+			else {
+				seen.insert(nums[j]);
+			}
+		}
+	}
+	return triplets;
+}
+
+vector<int> threeSumWithTarget(vector<int>& numbers, int target) {
 	vector<int> solution;
 	int sum;
 
@@ -28,12 +49,10 @@ vector<int> threeSum(vector<int>& numbers, int target) {
 	return solution;
 }
 
-
-
 int main() {
 	const int target = 27;
 	vector<int> numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	vector<int> ans = threeSum(numbers, target);
+	vector<int> ans = threeSumWithTarget(numbers, target);
 
 	int sum = 0;
 	cout << "Answer is: ";

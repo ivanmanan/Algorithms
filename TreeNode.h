@@ -1,8 +1,7 @@
 #ifndef TREENODE_H
 #define TREENODE_H
-#include <iostream>
-#include <vector>
 
+#include <iostream>
 using namespace std;
 
 struct TreeNode {

@@ -1,49 +1,46 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+#include "globals.h"
 
 ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 
 	ListNode* head = NULL;
-	ListNode* Cur;
-	ListNode* Nex;
+	ListNode* curr = NULL;
+	ListNode* next = NULL;
+
+	ListNode* p = l1;
+	ListNode* q = l2;
+
 	int carry = 0;
-	int sum = 0;
+	while(p != NULL || q != NULL) {
+		int sum = carry;
 
-	while(l1 != NULL || l2 != NULL) {
-
-		sum = carry;
-		if(l1 != NULL) {
-			sum += l1->val;
-			l1 = l1->next;
+		if(p != NULL) {
+			sum += p->val;
+			p = p->next;
 		}
-		if(l2 != NULL) {
-			sum += l2->val;
-			l2 = l2->next;
+		if(q != NULL) {
+			sum += q->val;
+			q = q->next;
 		}
 
 		int digit = sum % 10;
 		carry = sum / 10;
-		Nex = new ListNode(digit);
 
 		if(head == NULL) {
-			head = Nex;
+			head = new ListNode(digit);
+			curr = head;
 		}
 		else {
-			Cur->next = Nex;
+			next = new ListNode(digit);
+			curr->next = next;
+			curr = curr->next;
 		}
-		Cur = Nex;
 	}
 
+	// Check remaining carry
 	if(carry != 0) {
-		Nex = new ListNode(carry);
-		Cur->next = Nex;
+		next = new ListNode(carry);
+		curr->next = next;
 	}
+
 	return head;
 }
-};

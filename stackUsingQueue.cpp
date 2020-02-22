@@ -1,60 +1,42 @@
-#include <iostream>
-#include <queue>
-
-using namespace std;
-
-class stack {
- public:
-    stack() : m_size(0) {};
-    void push(int x);
-    void pop();
-    int top();
- private:
-    queue<int> q1;
-    queue<int> q2;
-    int m_size;
-    int m_top;
-};
+#include "globals.h"
 
 
-// O(1) push operation
-void stack::push(int x) {
-    m_size++;
+// Can either make the push operation O(N) or pop operation O(N) time complexity
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    MyStack() {}
 
-    q1.push(x);
-    m_top = x;
-}
-
-// O(N) pop operation
-void stack::pop() {
-
-    int front;
-    for (int i = 0; i < m_size; i++){
-        front = q1.front();
-        q1.pop();
-        if (i != m_size - 1) {
-            q2.push(front);
-        }
+    /** Push element x onto stack. */
+    void push(int x) {
+        q1.push(x);
     }
 
-    m_size--;
-    swap(q1, q2);
-}
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        int res;
+        while(!q1.empty()) {
+            res = q1.front();
+            q1.pop();
+            if(!q1.empty()) {
+                q2.push(res);
+            }
+        }
+        swap(q1,q2);
+        return res;
+    }
 
-int stack::top() {
-    return m_top;
-}
+    /** Get the top element. */
+    int top() {
+        return q1.back();
+    }
 
-int stack::size() {
-    return m_size;
-}
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty();
+    }
 
-int main() {
-    stack s;
-
-    s.push(5);
-    s.push(3);
-    cout << s.top() << endl; // should be 3
-    s.pop();
-    cout << s.top() << endl; // should be 5
-}
+private:
+    queue<int> q1;
+    queue<int> q2;
+};

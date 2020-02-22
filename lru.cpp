@@ -1,96 +1,85 @@
-// Least Recently Used Cache
-// SOLUTION:
-// https://www.geeksforgeeks.org/lru-cache-implementation/
-// Use doubly-ended queue and hash table
-
-#include <unordered_map>
-#include <iostream>
-#include <list>
-
-using namespace std;
+#include "globals.h"
 
 class LRUCache {
 public:
-    LRUCache(int capacity);
-	int get(int key);
-	void put(int key, int value);
-	void display();
+    LRUCache(int capacity) {
+        m_capacity = capacity;
+    }
+
+    int get(int key) {
+
+        auto got = ma.find(key);
+
+        if(got != ma.end()) {
+            int value = ma[key].first;
+
+            // Update the cache
+            dq.erase(ma[key].second);
+            dq.push_front(key);
+            ma[key] = make_pair(value, dq.begin());
+
+            return value;
+        }
+        else {
+            return -1;
+        }
+    }
+
+    void put(int key, int value) {
+
+        auto got = ma.find(key);
+
+        // Not found in cache
+        if(got == ma.end()) {
+            // Discard least recently used item
+            if(m_capacity == dq.size()) {
+                int last = dq.back();
+                dq.pop_back();
+                ma.erase(last);
+            }
+        }
+        else {
+            // Found in cache
+            dq.erase(ma[key].second);
+        }
+        dq.push_front(key);
+        ma[key] = make_pair(value, dq.begin());
+    }
 
 private:
-    uint m_size;
-    list<int> dq; // hold keys in queue
-    unordered_map<int, list<int>::iterator> node_map;
+    int m_capacity;
+    // key:{value,iterator}
+    unordered_map<int, pair<int,list<int>::iterator>> ma;
+    // dq contains all the keys
+    list<int> dq;
 };
 
-LRUCache::LRUCache(int capacity) {
-	m_size = capacity;
-}
-
-int LRUCache::get(int key) {
-	auto got = node_map.find(key);
-
-	// If found in hash table
-	if(got != node_map.end()) {
-
-		auto node = got->second;
-		int value = *node;
-
-		// Update reference
-		dq.erase(node);
-		dq.push_front(value);
-
-		// Update hash table
-		node_map[key] = dq.begin();
-
-		return value;
-	}
-	else {
-		return -1;
-	}
-}
-
-void LRUCache::put(int key, int value) {
-
-	// Check if already present in cache
-	if(node_map.find(key) == node_map.end()) {
-		// Check if cache is full
-		if(dq.size() == m_size) {
-
-			// Remove from hash table
-			int old_key = dq.back();
-			dq.pop_back();
-			node_map.erase(old_key);
-		}
-	}
-	else {
-		dq.erase(node_map[key]);
-	}
-	dq.push_front(value);
-	node_map[key] = dq.begin();
-}
-
-// Display contents of cache
-void LRUCache::display() {
-    for(auto it = dq.begin(); it != dq.end(); it++) {
-        cout << (*it) << " ";
-	}
-    cout << endl;
-
-	for(auto ite = node_map.begin(); ite != node_map.end(); ite++) {
-		cout << "Key: " << ite->first;
-		cout << endl;
-	}
-}
 
 int main() {
-	LRUCache cache = LRUCache(2);
-	cache.put(1, 1);
-	cache.put(2, 2);
-	cout << cache.get(1) << endl;    // prints 1
-	cache.put(3, 3);                 // evicts key 2
-	cout << cache.get(2) << endl;    // prints -1 (not found)
-	cache.put(4, 4);                 // evicts key 1
-	cout << cache.get(1) << endl;    // prints -1 (not found)
-	cout << cache.get(3) << endl;    // prints 3
-	cout << cache.get(4) << endl;    // prints 4
+	LRUCache lru(1);
+
+	lru.put(2,1);
+	int res = lru.get(2);
+	int ans = 1;
+
+	cout << "Step 1" << endl;
+	cout << "Output:   " << res << endl;
+	cout << "Expected: " << ans << endl;
+	cout << "===========================================" << endl;
+
+	lru.put(3,2);
+	res = lru.get(2);
+	ans = -1;
+
+	cout << "Step 2" << endl;
+	cout << "Output:   " << res << endl;
+	cout << "Expected: " << ans << endl;
+	cout << "===========================================" << endl;
+
+	res = lru.get(3);
+	ans = 2;
+
+	cout << "Step 3" << endl;
+	cout << "Output:   " << res << endl;
+	cout << "Expected: " << ans << endl;
 }

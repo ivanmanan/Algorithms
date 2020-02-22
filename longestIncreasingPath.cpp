@@ -1,81 +1,68 @@
-/*
-  SOLUTION:
-  Use DFS
-  Use memo
+#include "globals.h"
 
-  When using dfs, pass by reference the pathSum
-  If memo[r][c] is not null, return that
- */
+int dfs(int r, int c, vector<vector<int>>& matrix, vector<vector<int>>& memo, int parentValue) {
 
+	// Check bounds
+	if(r < 0 || c < 0 || r >= matrix.size() || c >= matrix[0].size() || parentValue >= matrix[r][c]) {
+		return 0;
+	}
 
-#include <vector>
-#include <iostream>
-#include <climits>
-
-using namespace std;
-
-
-int dfs(int r, int c, vector<vector<int>>& grid, vector<vector<int>> memo, int& maxValue) {
-	if(memo[r][c] != -1) {
+	if(memo[r][c]) {
 		return memo[r][c];
 	}
-	vector<int> rowNeighbor = {-1, 1, 0,  0};
-	vector<int> colNeighbor = { 0, 0, 1, -1};
+
+	vector<int> rowNeighbors = {0,  0, 1, -1};
+	vector<int> colNeighbors = {1, -1, 0,  0};
+
+	int maxLocalPath = 0;
+	for(int i = 0; i < rowNeighbors.size(); i++) {
+		maxLocalPath = max(maxLocalPath, dfs(r+rowNeighbors[i], c+colNeighbors[i], matrix, memo, matrix[r][c]) + 1);
+	}
+	memo[r][c] = maxLocalPath;
+	return memo[r][c];
+}
+
+
+
+int longestIncreasingPath(vector<vector<int>>& matrix) {
+
+	if(matrix.empty()) {
+		return 0;
+	}
+
+	int maxRow = matrix.size();
+	int maxCol = matrix[0].size();
+
+	// Each element in grid contains the longest increasing path
+	vector<vector<int>> memo(maxRow, vector<int>(maxCol, 0));
 
 	int maxPath = 0;
 
-	for(int i = 0; i < rowNeighbor.size(); i++) {
-		// Check if position is safe
-		const int new_r = r + rowNeighbor[i];
-		const int new_c = c + colNeighbor[i];
+	int parentValue = INT_MIN;
 
-		if(new_r >= 0 && new_c >= 0 && new_r < grid.size() && new_c < grid[0].size() && grid[r][c] < grid[new_r][new_c]) {
-			int temp = grid[r][c] + dfs(new_r, new_c, grid, memo, maxValue);
-			if(maxPath < temp) {
-				maxPath = temp;
-			}
+	for(int r = 0; r < maxRow; r++) {
+		for(int c = 0; c < maxCol; c++) {
+			maxPath = max(maxPath, dfs(r, c, matrix, memo, parentValue));
 		}
 	}
-	memo[r][c] = maxPath;
-	if(maxValue < memo[r][c]) {
-		maxValue = memo[r][c];
-	}
-	return 0;
+	return maxPath;
 }
 
 
-// Assume all values are either positive integers or zeros
-int longestIncreasingPath(vector<vector<int>>& grid) {
 
-	int max_row = grid.size();
-	int max_col = grid[0].size();
-	vector<vector<int>> memo(max_row, vector<int>(max_col, -1));
-
-	int maxValue = INT_MIN;
-
-	for(int r = 0; r < max_row; r++) {
-		for(int c = 0; c < max_col; c++) {
-			dfs(r, c, grid, memo, maxValue);
-		}
-	}
-	return maxValue;
-}
 
 int main() {
-	vector<vector<int>> grid;
+	const int ans = 4;
+	vector<vector<int>> grid(3, vector<int>(3, 0));
 
-	int value = 1;
-	for(int r = 0; r < 3; r++) {
-		vector<int> row;
-		for(int c = 0; c < 3; c++) {
-			cout << value << ", ";
-			row.push_back(value);
-			value++;
-		}
-		cout << endl;
-		grid.push_back(row);
-	}
+	vector<int> row1 = {9, 9, 4};
+	vector<int> row2 = {6, 6, 8};
+	vector<int> row3 = {2, 1, 1};
 
-	cout << longestIncreasingPath(grid) << endl;
-	cout << "Expected: 29" << endl;
+	grid.push_back(row1);
+	grid.push_back(row2);
+	grid.push_back(row3);
+
+	cout << "Output:   " << longestIncreasingPath(grid) << endl;
+	cout << "Expected: " << ans << endl;
 }
