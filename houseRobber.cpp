@@ -58,3 +58,27 @@ int rob(vector<int>& nums) {
 /*
   Constraint: Homes are arranged in a circle
 */
+
+int robII(vector<int>& nums) {
+	vector<int> memo1;
+	vector<int> memo2;
+	memo1.push_back(0);
+	memo2.push_back(0);
+	if(!nums.empty()){
+		memo1.push_back(nums[0]);
+	}
+	if(nums.size() > 1){
+		memo2.push_back(nums[1]);
+		for(int i = 2; i < nums.size(); i++){
+			//choose nums[0]
+			int max1 = max((memo1[0] + nums[i-1]), memo1[1]);
+			memo1[0] = memo1[1];
+			memo1[1] = max1;
+			//don't choose nums[0]; base case already factors in nums[1]
+			int max2 = max((memo2[0] + nums[i]), memo2[1]);
+			memo2[0] = memo2[1];
+			memo2[1] = max2;
+		}
+	}
+	return max(memo1.back(), memo2.back());
+}

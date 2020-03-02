@@ -42,5 +42,10 @@ void printQueueTreeNode(queue<TreeNode*> q) {
 	cout << endl;
 }
 
+void printHashTable(unordered_map<char,int> ma) {
+	for(auto it = ma.begin(); it != ma.end(); it++) {
+		cout << it->first << ":" << it->second << endl;
+	}
+}
 
 #endif
