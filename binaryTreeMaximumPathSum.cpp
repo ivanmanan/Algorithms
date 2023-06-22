@@ -16,10 +16,11 @@ int dfs(TreeNode *root, int &res) {
 	int L = dfs(root->left, res);
 	int R = dfs(root->right, res);
 
-	// Max path for parent node with one child node
+	// Max path when current node is not the parent node
+	// i.e. this is part of an existing path
 	int single_max = max(root->val, max(L,R) + root->val);
 
-	// Max path when parent node under consideration is the root of the path
+	// Max path when the current node is to be considered as the root of the node
 	int max_top = max(single_max, root->val + L + R);
 
 	res = max(res, max_top);

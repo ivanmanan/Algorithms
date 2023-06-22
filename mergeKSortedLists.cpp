@@ -6,23 +6,23 @@ ListNode* mergeKListsUsingListNode(vector<ListNode*>& lists) {
 	ListNode* head = NULL;
 	ListNode* curr = NULL;
 
-	priority_queue<pl, vector<pl>, greater<pl>> minHeap;
+	priority_queue<pl, vector<pl>, greater<pl>> min_pq;
 	pair<int, ListNode*> m_pair;
 
-	// Initialize min_heap with beginning elements of each list
+	// Initialize min_pq with beginning elements of each list
 	// O(N) --- number of linked lists
 	for(int i = 0; i < lists.size(); i++) {
 		if(lists[i] != NULL) {
 			m_pair.first = lists[i]->val;
 			m_pair.second = lists[i];
-			minHeap.push(m_pair);
+			min_pq.push(m_pair);
 		}
 	}
 
-	while(!minHeap.empty()) {
+	while(!min_pq.empty()) {
 
-		m_pair = minHeap.top();
-		minHeap.pop();
+		m_pair = min_pq.top();
+		min_pq.pop();
 
 		// Append to linked list
 		ListNode* temp = m_pair.second;
@@ -42,7 +42,7 @@ ListNode* mergeKListsUsingListNode(vector<ListNode*>& lists) {
 		if(temp != NULL) {
 			m_pair.first = temp->val;
 			m_pair.second = temp;
-			minHeap.push(m_pair);
+			min_pq.push(m_pair);
 		}
 	}
 	return head;
@@ -62,36 +62,36 @@ void iterateLists(list<list<int>> lists) {
 
 	// Assume that this works during in-person interview
 	// Pair: value, iterator
-	priority_queue<pi, vector<pi>, greater<pi>> min_heap;
+	priority_queue<pi, vector<pi>, greater<pi>> min_pq;
 	pair<int, list<int>::iterator> m_pair;
 
-	// Initialize min_heap with beginning elements of each list
+	// Initialize min_pq with beginning elements of each list
 	// O(N) --- number of linked lists
 	for (auto it = lists.begin(); it != lists.end(); it++) {
 		m_pair.first = (*it).front(); // Value
 		m_pair.second = (*it).begin(); // Iterator
-		min_heap.push(m_pair);
+		min_pq.push(m_pair);
 	}
 
 	// O(N * K)
 	// N = # of linked lists
 	// K = largest linked list size
-	while(!min_heap.empty()) {
+	while(!min_pq.empty()) {
 
 		// Print out and remove element top of min-heap
-		m_pair = min_heap.top();
+		m_pair = min_pq.top();
 		cout << m_pair.first << ' ' << endl;
 
 		// increment to next iterator in list
 		auto ite = m_pair.second();
 		++ite;
-		min_heap.pop();
+		min_pq.pop();
 
-		// Check if iterator is valid, then update min_heap
+		// Check if iterator is valid, then update min_pq
 		m_pair.first = *ite;
 		m_pair.second = ite;
 
-		min_heap.push(m_pair);
+		min_pq.push(m_pair);
 	}
 }
 
