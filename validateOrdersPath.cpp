@@ -40,7 +40,7 @@ bool validateOrdersPath(vector<string> ordersPath) {
         }
         else if(order == "D") {
             if(pickups.find(num) == pickups.end() || deliveries.find(num) != deliveries.end()) {
-                // Pickup was not handled yet OR there is a duplciate already
+                // Pickup was not handled yet OR there is a duplicate already
                 return false;
             }
             else {
