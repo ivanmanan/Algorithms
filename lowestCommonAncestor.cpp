@@ -1,32 +1,95 @@
 #include "TreeNode.h"
 
-TreeNode* LCA = NULL;
+/*
 
-bool dfs(TreeNode* root, TreeNode* p, TreeNode* q) {
-	if(root == NULL) {
-		return false;
-	}
+    1   2       3      4    5
 
-	bool L = dfs(root->left, p, q);
-	bool R = dfs(root->right, p, q);
+    4 -> 2 ->
+              [ 5 ] -> 3 -> NULL
+         6 ->
 
-	// if current node is either p or q
-	bool mid = (root == p || root == q);
+         6      7      8
 
-	// check if any two flags become true
-	/*
-	  1. (L && R) --> backtrack to where L and R are both true
-	  2. (mid && L) --> this means target node is LCA
-	  3. (mid && R) --> this means target node is LCA
-	 */
-	if((mid && L) || (mid && R) || (L && R)) {
-		LCA = root;
-	}
-	return (mid || L || R);
+
+    5   6       7      8
+
+    4 -> 2 ->
+              [ 5 ] -> 3 -> NULL
+         6 ->
+
+         1      2      3    4
+*/
+
+// Lowest Common Ancestor III - Only given the two node pointers
+// This is essentially the intersection of two linked lists
+Node* lowestCommonAncestor(Node* p, Node * q) {
+    Node* l1 = p;
+    Node* l2 = q;
+
+    while(l1 != l2) {
+        if(l1 != NULL) {
+            l1 = l1->parent;
+        }
+        else {
+            l1 = q;
+        }
+        if(l2 != NULL) {
+            l2 = l2->parent;
+        }
+        else {
+            l2 = p;
+        }
+    }
+    return l1;
 }
 
 
+// Lowest Common Ancestor I - Given root node and two node pointers
 TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-	dfs(root, p, q);
-	return LCA;
+    if(root == NULL) {
+        return NULL;
+    }
+    if(root == p || root == q) {
+        return root;
+    }
+    TreeNode* l = lowestCommonAncestor(root->left, p, q);
+    TreeNode* r = lowestCommonAncestor(root->right, p, q);
+    if(l != NULL && r != NULL) {
+        return root;
+    }
+    if(l != NULL) {
+        return l;
+    }
+    else {
+        return r;
+    }
+}
+
+// BFS to find the nodes on the deepest level
+// leftmost and rightmost
+// Then do LCA
+TreeNode* subtreeWithAllDeepest(TreeNode* root) {
+
+    list<TreeNode*> dq;
+    TreeNode* leftmost;
+    TreeNode* rightmost;
+    dq.push_back(root);
+    int level = 0;
+    while(!dq.empty()) {
+        leftmost = dq.front();
+        rightmost = dq.back();
+        int curr_size = dq.size();
+        for(int i = 0; i < curr_size; i++) {
+            TreeNode* curr = dq.front();
+            dq.pop_front();
+            if(curr->left != NULL) {
+                dq.push_back(curr->left);
+            }
+            if(curr->right != NULL) {
+                dq.push_back(curr->right);
+            }
+        }
+    }
+
+    return lowestCommonAncestor(root, leftmost, rightmost);
 }

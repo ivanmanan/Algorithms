@@ -15,3 +15,20 @@ bool containsDuplicate(vector<int>& nums) {
 	}
 	return false;
 }
+
+bool containsNearbyDuplicate(vector<int>& nums, int k) {
+	// int:index
+	unordered_map<int,int> ma;
+	for(int i = 0; i < nums.size(); i++) {
+		auto got = ma.find(nums[i]);
+		if(got != ma.end()) {
+			int j = got->second;
+			if(abs(i-j) <= k) {
+				return true;
+			}
+		}
+		ma[nums[i]] = i;
+		continue;
+	}
+	return false;
+}

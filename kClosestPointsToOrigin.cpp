@@ -14,25 +14,29 @@
     element in the input array, then you have roughly O(n * log(k)).
 */
 
-// Distance, (x,y)
-typedef pair<double, vector<int>> pd;
+// Use max heap: O(N log K)
+// Use min heap: O(N log N)
 vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+    priority_queue<pair<double,pair<int,int>>> max_pq;
+
+    // Time: O(N log N)
+    // Space: O(K) - keep track of K elements
+    for(auto& point: points) {
+        double x = double(point[0]);
+        double y = double(point[1]);
+        double distance = sqrt(x*x + y*y);
+        max_pq.push(make_pair(distance, make_pair(x,y)));
+        while(max_pq.size() > k) {
+            // Pop the largest element to retain log K heap insertion
+            max_pq.pop();
+        }
+    }
     vector<vector<int>> res;
-    priority_queue<pd, vector<pd>, greater<pd>> pq;
-
-    for(int i = 0; i < points.size(); i++) {
-        int x = points[i][0];
-        int y = points[i][1];
-        double distance = sqrt(double(x*x + y*y));
-        cout << "(" << x << "," << y << ")" << " - " << distance << endl;
-        pd m_pair = make_pair(distance, points[i]);
-        pq.push(m_pair);
+    while(!max_pq.empty()) {
+        int x = max_pq.top().second.first;
+        int y = max_pq.top().second.second;
+        max_pq.pop();
+        res.push_back({x, y});
     }
-    for(int i = 0; i < k; i++) {
-        pd m_pair = pq.top();
-        pq.pop();
-        res.push_back(m_pair.second);
-    }
-
     return res;
 }

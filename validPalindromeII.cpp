@@ -1,26 +1,25 @@
-#include "globals.h"
-
-bool isPalindrome(string s, int i, int j) {
-	for(int k = i; k <= i + (j-i)/2; k++) {
-		if(s[k] != s[j - k + i]) {
+bool check(string s, int i, int j) {
+	while(i < j) {
+		if(s[i] != s[j]) {
 			return false;
 		}
+		i++;
+		j--;
 	}
 	return true;
 }
 
-
-
 bool validPalindrome(string s) {
+	int i = 0;
+	int j = s.length()-1;
 
-
-	for(int i = 0; i < s.size() / 2; i++) {
-
-		// If the corresponding characters are not equivalent, then
-		// consider the string if either characters are removed
-		if(s[i] != s[s.length() - 1 - i]) {
-			int j = s.length() - 1 - i;
-			return (isPalindrome(s, i+1, j) || isPalindrome(s, i, j-1));
+	while(i < j) {
+		if(s[i] != s[j]) {
+			return check(s, i+1, j) || check(s, i, j-1);
+		}
+		else {
+			i++;
+			j--;
 		}
 	}
 	return true;

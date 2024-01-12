@@ -6,3 +6,6 @@
 
 # Unignore all dirs
 !*/
+
+./metaGuide.cpp
+./nvidiaGuide.cpp

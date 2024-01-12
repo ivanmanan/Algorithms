@@ -1,54 +1,52 @@
 #include "globals.h"
 
-ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-	ListNode* head = NULL;
-	ListNode* curr = NULL;
-	ListNode* next = NULL;
+ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    ListNode* p = list1;
+    ListNode* q = list2;
 
-	// Create head node
-	if(l1 == NULL || l2 == NULL) {
-		if(l1 == NULL && l2 == NULL) {
-			return head;
-		}
-		else if(l1 == NULL) {
-			head = new ListNode(l2->val);
-			l2 = l2->next;
-		}
-		else {
-			head = new ListNode(l1->val);
-			l1 = l1->next;
-		}
-	}
-	else if(l1->val > l2->val) {
-		head = new ListNode(l2->val);
-		l2 = l2->next;
-	}
-	else {
-		head = new ListNode(l1->val);
-		l1 = l1->next;
-	}
+    ListNode* head = NULL;
+    ListNode* curr = NULL;
 
-	curr = head;
+    while(p != NULL && q != NULL) {
+        if(p->val <= q->val) {
+            if(head == NULL) {
+                head = p;
+                curr = head;
+            }
+            else {
+                curr->next = p;
+                curr = curr->next;
+            }
+            p = p->next;
+        }
+        else {
+            if(head == NULL) {
+                head = q;
+                curr = head;
+            }
+            else {
+                curr->next = q;
+                curr = curr->next;
+            }
+            q = q->next;
+        }
+    }
+    if(p != NULL) {
+        if(head == NULL) {
+            return p;
+        }
+        else {
+            curr->next = p;
+        }
+    }
+    else if(q != NULL) {
+        if(head == NULL) {
+            return q;
+        }
+        else {
+            curr->next = q;
+        }
+    }
+    return head;
 
-	while(l1 != NULL || l2 != NULL) {
-		if(l1 == NULL) {
-			next = new ListNode(l2->val);
-			l2 = l2->next;
-		}
-		else if(l2 == NULL) {
-			next = new ListNode(l1->val);
-			l1 = l1->next;
-		}
-		else if(l1->val > l2->val) {
-			next = new ListNode(l2->val);
-			l2 = l2->next;
-		}
-		else {
-			next = new ListNode(l1->val);
-			l1 = l1->next;
-		}
-		curr->next = next;
-		curr = curr->next;
-	}
-	return head;
 }

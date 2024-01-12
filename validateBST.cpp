@@ -1,72 +1,18 @@
 #include "globals.h"
 
-bool isBSTwithStack(TreeNode* root) {
 
-	if(root == NULL) {
-		return true;
-	}
-
-	// Do inOrder traversal - L C R
-	TreeNode* curr = root;
-	stack<TreeNode*> st;
-
-	int prev = - INT_MAX;
-
-	while(curr != NULL || !st.empty()) {
-
-		while(curr != NULL) {
-			st.push(curr);
-			curr = curr->left;
-		}
-
-		// Prev node corresponds to the order of in-order traversal
-		curr = st.top();
-		st.pop();
-
-		if(prev >= curr->val) {
-			return false;
-		}
-		prev = curr->val;
-		curr = curr->right;
-
-	}
-	return true;
+bool inorder(TreeNode* root, long int left, long int right) {
+    if(root == NULL) return true;
+    // Do current node
+    if(root->val > left && root->val < right) {
+        bool l = inorder(root->left, left, root->val);
+        bool r = inorder(root->right, root->val, right);
+        return l && r;
+    }
+    return false;
 }
 
-// Do in-order traversal
-bool isBST(TreeNode* root, TreeNode* prev) {
 
-	if (root == NULL) {
-		return true;
-	}
-
-	// Go left node first
-	if (!isBST(root->left, prev)) {
-		return false;
-	}
-
-	// Do current node
-	if (prev != NULL && prev->val >= root->val) {
-		return false;
-	}
-
-	// Do right node
-	return isBST(root->right, root);
+bool isValidBST(TreeNode* root) {
+    return inorder(root, LONG_MIN, LONG_MAX);
 }
-
-int main() {
-	TreeNode* root = createBST();
-
-	bool ans = isBSTwithStack(root);
-
-	cout << "Expected Answer: True" << endl;
-	if(ans) {
-		cout << "Real Answer: True" << endl;
-	}
-	else {
-		cout << "Real Answer: False" << endl;
-	}
-
-	deleteTree(root);
-}
-

@@ -1,21 +1,10 @@
 #!/usr/bin/python3
 """
-Python Cheat Sheet
+Python Basics
 """
 
 import math
 import sys
-import threading
-
-
-def parallel_programming():
-    t1 = threading.Thread(target=func1)
-    t2 = threading.Thread(target=func2)
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
-
 
 
 def variables_and_conditionals():
@@ -80,7 +69,7 @@ def python_math():
     print(math.floor(3/2))
     print(math.ceil(3/2))
     print(math.sqrt(2))
-    print(math.pow(2,3))
+    print(math.pow(2,3)) # ALTERNATIVE TO POW: **
 
     # Python numbers are infinite so they never overflow
     print(float("inf")) # MAX_INT
@@ -174,12 +163,63 @@ def arrays():
     arr = [[i] * 4 for i in range(4)]
     print(arr)
 
+def strings():
     # Strings are similar to arrays
     # However, strings are immutable
     s = "abc"
     print(s[0:2])
     # This won't work
     # s[0] = "A"
+
+    # Combine a list of strings with a delimiter
+    strings_arr = ["ab", "cd", "ef"]
+    print("".join(strings_arr))
+
+
+
+"""
+Duck typing
+
+The type or the class of an object is less important than the method it defines.
+Using Duck Typing, we do not check types at all. Instead, we check for the presence
+of a given method or attribute.
+
+
+"""
+# Python program to demonstrate
+# duck typing
+
+
+class Bird:
+    def fly(self):
+        print("fly with wings")
+
+class Airplane:
+    def fly(self):
+        print("fly with fuel")
+
+class Fish:
+    def swim(self):
+        print("fish swim in sea")
+
+# Attributes having same name are
+# considered as duck typing
+for obj in Bird(), Airplane(), Fish():
+    obj.fly()
+
+"""
+Decorators
+Decorators are a very powerful and useful tool in Python since it allows programmers to
+modify the behaviour of a function or class. Decorators allow us to wrap another function
+in order to extend the behaviour of the wrapped function, without permanently modifying it
+"""
+def shout(text):
+    return text.upper()
+
+def decorator():
+    print(shout('Hello'))
+    yell = shout
+    print(yell('Hello'))
 
 
 def main():
@@ -188,7 +228,8 @@ def main():
     # loops()
     # python_math()
 
-    arrays()
+    # arrays()
+    # strings()
 
     return 0
 

@@ -1,5 +1,60 @@
 #include "globals.h"
 
+
+// Three Sum with two pointers
+vector<vector<int>> threeSum(vector<int>& nums) {
+	sort(nums.begin(), nums.end());
+
+	vector<vector<int>> res;
+	if(nums.size() < 3) {
+		return res;
+	}
+	if(nums[0] > 0) {
+		return res;
+		// Positive value, so there are no negative values
+	}
+	for(int i = 0; i < nums.size()-2; i++) {
+		if(nums[i] > 0) {
+			break;
+			// Number is positive, so can stop
+		}
+
+		if(i > 0 && nums[i] == nums[i-1]) {
+			continue;
+			// Ignore duplicate
+		}
+		int j = i+1;
+		int k = nums.size()-1;
+
+		while(j < k) {
+			int sum = nums[i] + nums[j] + nums[k];
+			if(sum == 0) {
+				vector<int> temp = {nums[i], nums[j], nums[k]};
+				res.push_back(temp);
+				// To avoid duplicate triples
+				int last_low_occurrence = nums[j];
+				int last_high_occurrence = nums[k];
+				while(j < k && nums[j] == last_low_occurrence) {
+					j++;
+				}
+				while(j < k && nums[k] == last_high_occurrence) {
+					k--;
+				}
+			}
+			else {
+				if(sum > 0) {
+					k--;
+				}
+				else {
+					j++;
+				}
+			}
+		}
+	}
+	return res;
+}
+
+
 vector<vector<int>> threeSum(vector<int>& nums) {
 
 	vector<vector<int>> triplets;

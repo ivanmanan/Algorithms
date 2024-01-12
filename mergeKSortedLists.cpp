@@ -1,51 +1,36 @@
 #include "globals.h"
 
-typedef pair<int, ListNode*> pl;
 
-ListNode* mergeKListsUsingListNode(vector<ListNode*>& lists) {
-	ListNode* head = NULL;
-	ListNode* curr = NULL;
 
-	priority_queue<pl, vector<pl>, greater<pl>> min_pq;
-	pair<int, ListNode*> m_pair;
+ListNode* mergeKLists(vector<ListNode*>& lists) {
 
-	// Initialize min_pq with beginning elements of each list
-	// O(N) --- number of linked lists
+	// min heap
+	priority_queue<int, vector<int>, greater<int>> pq;
+
 	for(int i = 0; i < lists.size(); i++) {
-		if(lists[i] != NULL) {
-			m_pair.first = lists[i]->val;
-			m_pair.second = lists[i];
-			min_pq.push(m_pair);
+		ListNode* temp = lists[i];
+		while(temp != NULL) {
+			pq.push(temp->val);
+			temp = temp->next;
 		}
 	}
 
-	while(!min_pq.empty()) {
-
-		m_pair = min_pq.top();
-		min_pq.pop();
-
-		// Append to linked list
-		ListNode* temp = m_pair.second;
-		ListNode* nex = new ListNode(temp->val);
-
+	ListNode* head = NULL;
+	ListNode* curr = NULL;
+	while(!pq.empty()) {
+		int val = pq.top();
+		pq.pop();
 		if(head == NULL) {
-			head = nex;
-			curr = nex;
+			head = new ListNode(val);
+			curr = head;
 		}
 		else {
-			curr->next = nex;
+			curr->next = new ListNode(val);
 			curr = curr->next;
-		}
-
-		// Update heap
-		temp = temp->next;
-		if(temp != NULL) {
-			m_pair.first = temp->val;
-			m_pair.second = temp;
-			min_pq.push(m_pair);
 		}
 	}
 	return head;
+
 }
 
 //////////////////////////////////////////////////////////////////////

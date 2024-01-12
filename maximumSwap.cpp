@@ -10,28 +10,31 @@
   Explanation: Swap the number 2 and the number 7.
 */
 
-int maximumSwap(int num)
-{
-	if(num < 10) return num;
-	// int to string (of digits)
-	string digits = to_string(num);
+int maximumSwap(int num) {
+	int maxindex = -1;
+	int maxdigit = -1;
+	int leftindex = -1;
+	int rightindex = -1;
 
-	// find first ascending
-	int fa = 1;
-	while(fa < digits.size() && digits[fa] <= digits[fa-1]) ++fa;
+	string numstr = to_string(num);
+	for(int i = numstr.length()-1; i >= 0; i--) {
+		int value = numstr[i] - '0';
+		if(value > maxdigit) {
+			// i=1: max=7
+			maxindex = i;
+			maxdigit = value;
+			continue;
+		}
+		if(value < maxdigit) {
+			// i=2: left=2,right=3
 
-	if(fa == digits.size()) return num; // all descending - this is the largest possible
-
-	// from fa find the biggest
-	int indx1 = fa;
-	for(int i = fa; i < digits.size(); ++i)
-		if(digits[i] >= digits[indx1]) indx1 = i; // >= not > - we want to swap from least significant position possible
-
-	// see where to place it - the more significant, the better (they are sorted in descending order)
-	int indx2 = fa-1;
-	while(indx2-1 >= 0 && digits[indx2-1] < digits[indx1]) --indx2;
-	swap(digits[indx1], digits[indx2]);
-
-	// back to int
-	return stoi(digits);
+			leftindex = i;
+			rightindex = maxindex;
+		}
+	}
+	if(leftindex == -1) {
+		return num;
+	}
+	swap(numstr[leftindex], numstr[rightindex]);
+	return stoi(numstr);
 }

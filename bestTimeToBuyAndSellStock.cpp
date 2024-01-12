@@ -1,19 +1,17 @@
 #include "globals.h"
 
-// Part I
-int maxProfitI(vector<int>& prices) {
-	if (prices.size() == 1 || prices.empty()) return 0;
-	int maxprofit = 0, len = prices.size();
-	vector<int> Rmax (len, 0);
-	Rmax[len-1] = prices[len-1];
-	for (int i = len - 2; i >= 0; --i)      // obtain the Rmax array
-		Rmax[i] = max (prices[i], Rmax[i+1]);
-
-	for (int i = 0; i < len; ++i)          // obtain max profit
-		maxprofit = max (maxprofit, Rmax[i] - prices[i]);
-
-	return maxprofit;
+int maxProfit(vector<int>& prices) {
+	int res = 0;
+	int lowest = prices[0];
+	for(auto it = prices.begin(); it != prices.end(); it++) {
+		if(*it < lowest) {
+			lowest = *it;
+		}
+		res = max(res, *it - lowest);
+	}
+	return res;
 }
+
 
 
 // Part II
