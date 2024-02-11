@@ -1,11 +1,20 @@
-#include "globals.h"
-
-/*
-  Given an array of size n, find the majority element. The majority
-  element is the element that appears more than [ n/2 ] times. You may
-  assume that the array is non-empty and the majority element always exist
-  in the array.
-
-  SOLUTION
-  Use a hash table
-*/
+int majorityElement(vector<int>& nums) {
+    int curr = nums[0];
+    int votes = 1;
+    if(nums.size() == 1) {
+        return curr;
+    }
+    for(int i = 1; i < nums.size(); i++) {
+        if(nums[i] != curr) {
+            votes--;
+        }
+        else {
+            votes++;
+        }
+        if(votes <= 0) {
+            votes = 1;
+            curr = nums[i];
+        }
+    }
+    return curr;
+}
