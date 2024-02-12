@@ -3,9 +3,9 @@
     [0, 0, 0, 0, 0]
         1, 2, 3
     [0, 1, 2, 3, 0] snap=0
-            1
+           1
     [0, 1, 1, 3, 0] snap=1
-            4
+           4
     [0, 2, 4, 3, 0] snap=2
 
     Keep an array of indexes since we are given size
